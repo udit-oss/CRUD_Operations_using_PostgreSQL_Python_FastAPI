@@ -58,12 +58,12 @@ def addPerson(person:PersonOut):
 @app.put('/update_person/{person_id}', response_model=PersonOut, status_code=status.HTTP_202_ACCEPTED)
 def updatePerson(person_id:int, person:PersonOut):
     find_person  = db.query(models.Person).filter(models.Person.id == person_id).first()
-    if find_person is not None:
-        find_person.id = person.id
-        find_person.first_name = person.first_name
-        find_person.last_name = person.last_name
-        find_person.is_Male = person.is_Male
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Person with this ID does not exists")
+    if find_person is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Person with this ID does not exists")
+    find_person.id = person.id
+    find_person.first_name = person.first_name
+    find_person.last_name = person.last_name
+    find_person.is_Male = person.is_Male
     db.commit()
     return find_person
 
