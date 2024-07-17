@@ -4,11 +4,15 @@ A simple FastAPI project demonstrating how to create a RESTful API using Python 
 <br>
 your-project/
 ├── main.py # FastAPI application
+<br>
 ├── database.py # Database connection setup
+<br>
 ├── models.py # SQLAlchemy models
+<br>
 ├── create_db.py # Create tables in the database
-├── requirements.txt # Python dependencies
+<br>
 ├── .gitignore # Git ignore file
+<br>
 └── README.md # Project documentation
 <br>
 ### Prerequisites
