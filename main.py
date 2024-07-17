@@ -39,7 +39,7 @@ async def getBy_ID(person_id:int):
 
 # Route to add a new person
 @app.post('/addperson', response_model=PersonOut, status_code=status.HTTP_200_OK)
-def addPerson(person:PersonOut):
+async def addPerson(person:PersonOut):
     newPerson = models.Person(
         id = person.id,
         first_name = person.first_name,
@@ -56,7 +56,7 @@ def addPerson(person:PersonOut):
 
 # Route to update a person by ID
 @app.put('/update_person/{person_id}', response_model=PersonOut, status_code=status.HTTP_202_ACCEPTED)
-def updatePerson(person_id:int, person:PersonOut):
+async def updatePerson(person_id:int, person:PersonOut):
     find_person  = db.query(models.Person).filter(models.Person.id == person_id).first()
     if find_person is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Person with this ID does not exists")
@@ -69,7 +69,7 @@ def updatePerson(person_id:int, person:PersonOut):
 
 # Route to delete a person by ID
 @app.delete('/delete_person/{person_id}', response_model=PersonOut, status_code=200)
-def deletePerson(person_id:int):
+async def deletePerson(person_id:int):
     find_person = db.query(models.Person).filter(models.Person.id == person_id).first()
 
     if find_person is not None:
