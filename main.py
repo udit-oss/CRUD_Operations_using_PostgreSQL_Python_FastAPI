@@ -5,23 +5,31 @@ import models
 
 # Creating instance of the application
 app = FastAPI()  
+
+# Creating the database session
 db = SessionLocal()
 
+# Base Pydantic model with orm_mode enabled
+# The orm_mode configuration is enabled to allow the Pydantic 
+# models to work seamlessly with ORM (Object-Relational Mapping) objects like those from SQLAlchemy. 
 class OurBaseModel(BaseModel):
     class Config:
         orm_mode = True
 
+# Pydantic model for response
 class PersonOut(OurBaseModel):
     id: int
     first_name: str
     last_name: str
     is_Male: bool
 
+# Route to get every person
 @app.get('/', response_model=list[PersonOut], status_code=status.HTTP_200_OK)
 async def getAll_Persons():
     getAllPersons = db.query(models.Person).all()
     return getAllPersons
 
+# Route to get a person by ID
 @app.get('/getbyID/{person_id}', response_model=PersonOut, status_code=status.HTTP_200_OK)
 async def getBy_ID(person_id:int):
     getByID = db.query(models.Person).filter(models.Person.id == person_id).first()
@@ -29,6 +37,7 @@ async def getBy_ID(person_id:int):
         return getByID
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Person not found")  
 
+# Route to add a new person
 @app.post('/addperson', response_model=PersonOut, status_code=status.HTTP_200_OK)
 def addPerson(person:PersonOut):
     newPerson = models.Person(
@@ -45,6 +54,7 @@ def addPerson(person:PersonOut):
     db.commit()
     return newPerson
 
+# Route to update a person by ID
 @app.put('/update_person/{person_id}', response_model=PersonOut, status_code=status.HTTP_202_ACCEPTED)
 def updatePerson(person_id:int, person:PersonOut):
     find_person  = db.query(models.Person).filter(models.Person.id == person_id).first()
@@ -57,6 +67,7 @@ def updatePerson(person_id:int, person:PersonOut):
     db.commit()
     return find_person
 
+# Route to delete a person by ID
 @app.delete('/delete_person/{person_id}', response_model=PersonOut, status_code=200)
 def deletePerson(person_id:int):
     find_person = db.query(models.Person).filter(models.Person.id == person_id).first()
