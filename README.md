@@ -3,6 +3,7 @@ A simple FastAPI project demonstrating how to create a RESTful API using Python 
 ### Project Structure
 <br>
 your-project/
+<br>
 ├── main.py # FastAPI application
 <br>
 ├── database.py # Database connection setup
